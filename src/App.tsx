@@ -1,3 +1,5 @@
+import { useState } from 'react'
+
 const tasks = [
   {
     id: 1,
@@ -23,29 +25,42 @@ const tasks = [
 ]
 
 export const App = () => {
+  const [selectedTaskId, setSelectedTaskId] = useState<number | null>(null)
+
   const priorities = ['#fff', '#ffd7b5', '#ffb38a', '#ff9248', '#ff6700']
 
   if (tasks === null) return <h1>Загрузка...</h1>
   if (tasks.length === 0) return <h1>Задачи отсутствуют</h1>
 
   return (
-    <ul>
-      {tasks.map((task) => (
-        <li key={task.id} style={{ backgroundColor: priorities[task.priority], color: 'black' }}>
-          <p>
-            <b>Заголовок: </b>
-            <span style={{ textDecorationLine: task.isDone ? 'line-through' : 'none' }}>{task.title}</span>
-          </p>
-          <p>
-            <b>Статус: </b>
-            <input type="checkbox" defaultChecked={task.isDone} />
-          </p>
-          <p>
-            <b>Дата создания задачи: </b>
-            <span>{task.addedAt}</span>
-          </p>
-        </li>
-      ))}
-    </ul>
+    <>
+      <button onClick={() => setSelectedTaskId(null)}>Сбросить выделение</button>
+      <ul>
+        {tasks.map((task) => (
+          <li
+            key={task.id}
+            style={{
+              backgroundColor: priorities[task.priority],
+              color: 'black',
+              border: `2px solid ${task.id === selectedTaskId ? 'blue' : 'black'}`,
+            }}
+            onClick={() => setSelectedTaskId(task.id)}
+          >
+            <p>
+              <b>Заголовок: </b>
+              <span style={{ textDecorationLine: task.isDone ? 'line-through' : 'none' }}>{task.title}</span>
+            </p>
+            <p>
+              <b>Статус: </b>
+              <input type="checkbox" defaultChecked={task.isDone} />
+            </p>
+            <p>
+              <b>Дата создания задачи: </b>
+              <span>{task.addedAt}</span>
+            </p>
+          </li>
+        ))}
+      </ul>
+    </>
   )
 }
