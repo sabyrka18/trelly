@@ -1,31 +1,14 @@
-import { useState } from 'react'
-
-const tasks = [
-  {
-    id: 1,
-    title: 'Купить продукты на неделю',
-    isDone: false,
-    addedAt: '1 сентября',
-    priority: 2,
-  },
-  {
-    id: 2,
-    title: 'Полить цветы',
-    isDone: true,
-    addedAt: '2 сентября',
-    priority: 0,
-  },
-  {
-    id: 3,
-    title: 'Сходить на тренировку',
-    isDone: false,
-    addedAt: '3 сентября',
-    priority: 1,
-  },
-]
+import { useEffect, useState } from 'react'
+import type { Task } from './types/task'
+import { getTasks } from './api/tasks'
 
 export const App = () => {
-  const [selectedTaskId, setSelectedTaskId] = useState<number | null>(null)
+  const [selectedTaskId, setSelectedTaskId] = useState<string | null>(null)
+  const [tasks, setTasks] = useState<Task[] | null>([])
+
+  useEffect(() => {
+    getTasks().then(data => setTasks(data))
+  }, [])
 
   const priorities = ['#fff', '#ffd7b5', '#ffb38a', '#ff9248', '#ff6700']
 
@@ -40,7 +23,7 @@ export const App = () => {
           <li
             key={task.id}
             style={{
-              backgroundColor: priorities[task.priority],
+              backgroundColor: priorities[task.attributes.priority],
               color: 'black',
               border: `2px solid ${task.id === selectedTaskId ? 'blue' : 'black'}`,
             }}
@@ -48,15 +31,17 @@ export const App = () => {
           >
             <p>
               <b>Заголовок: </b>
-              <span style={{ textDecorationLine: task.isDone ? 'line-through' : 'none' }}>{task.title}</span>
+              <span style={{ textDecorationLine: task.attributes.status ? 'line-through' : 'none' }}>
+                {task.attributes.title}
+              </span>
             </p>
             <p>
               <b>Статус: </b>
-              <input type="checkbox" defaultChecked={task.isDone} />
+              <input type="checkbox" defaultChecked={task.attributes.status === 2} />
             </p>
             <p>
               <b>Дата создания задачи: </b>
-              <span>{task.addedAt}</span>
+              <span>{new Date(task.attributes.addedAt).toLocaleDateString()}</span>
             </p>
           </li>
         ))}
