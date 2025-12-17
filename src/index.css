@@ -13,6 +13,24 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+ul {
+  list-style: none;
+  padding-left: 0;
+}
+
+li {
+  padding: 10px 20px;
+  border-radius: 6px;
+}
+
+li:not(:last-child) {
+  margin-bottom: 20px;
+}
+
+h1 {
+  margin-block: 0;
+}
+
 a {
   font-weight: 500;
   color: #646cff;
@@ -23,7 +41,6 @@ a:hover {
 }
 
 body {
-  margin: 0;
   display: flex;
   place-items: center;
   min-width: 320px;
