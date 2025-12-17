@@ -5,7 +5,7 @@ import { TaskItem } from './TaskItem'
 
 type Props = {
   selectedTaskId: string | null
-  onTaskSelect: (taskId: string, boardId: string | null) => void
+  onTaskSelect: (taskId: string | null, boardId: string | null) => void
 }
 
 export const TaskList = ({ selectedTaskId, onTaskSelect }: Props) => {
@@ -22,15 +22,18 @@ export const TaskList = ({ selectedTaskId, onTaskSelect }: Props) => {
   if (tasks.length === 0) return <h2>Задачи отсутствуют</h2>
 
   return (
-    <ul>
-      {tasks.map((task) => (
-        <TaskItem
-          key={task.id}
-          task={task}
-          isSelected={task.id === selectedTaskId}
-          onTaskSelected={onSelectTask}
-        />
-      ))}
-    </ul>
+    <div>
+      <button onClick={() => onTaskSelect(null, null)}>Reset</button>
+      <ul>
+        {tasks.map((task) => (
+          <TaskItem
+            key={task.id}
+            task={task}
+            isSelected={task.id === selectedTaskId}
+            onTaskSelected={onSelectTask}
+          />
+        ))}
+      </ul>
+    </div>
   )
 }
