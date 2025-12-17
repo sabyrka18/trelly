@@ -2,17 +2,24 @@ import { useEffect, useState } from 'react'
 import type { Task } from '../types/task'
 import { getTask } from '../api/tasks'
 
-export const TaskDetails = () => {
+type Props = {
+  selectedTaskId: string | null
+  boardId: string | null
+}
+
+export const TaskDetails = ({ selectedTaskId, boardId }: Props) => {
   const [selectedTask, setSelectedTask] = useState<Task | null>(null)
 
-  const selectedTaskId = '4f310604-82b5-4afd-b9a4-ddf12dfac0a3'
-  const boardId = '13923117-72de-4788-a7f0-4c42f162a5ab'
-
   useEffect(() => {
-    if (!boardId || !selectedTaskId) return
+    if (!boardId || !selectedTaskId) {
+      setSelectedTask(null)
+      return
+    }
 
+    setSelectedTask(null)
     getTask(boardId, selectedTaskId).then(setSelectedTask)
   }, [boardId, selectedTaskId])
+
 
   return (
     <section>
@@ -24,9 +31,18 @@ export const TaskDetails = () => {
         <p>Loading...</p>
       ) : (
         <>
-          <h3>Title: {selectedTask.attributes.title}</h3>
-          <p>Board title: {selectedTask.attributes.boardTitle}</p>
-          <p>Description: {selectedTask.attributes.description ?? 'no description'}</p>
+          <p>
+            <b>Title:</b>
+            {selectedTask.attributes.title}
+          </p>
+          <p>
+            <b>Board title:</b>
+            {selectedTask.attributes.boardTitle}
+          </p>
+          <p>
+            <b>Description:</b>
+            {selectedTask.attributes.description ?? 'no description'}
+          </p>
         </>
       )}
     </section>
